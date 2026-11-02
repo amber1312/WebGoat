@@ -19,7 +19,7 @@ jobs:
 
       # ---- Setup (report separately) ----
       - name: Install Snyk CLI
-        run: npm install -g snyk@<SNYK_VERSION>
+        run: npm install -g snyk@1.1300.0
       - name: Snyk version
         run: snyk --version
 
