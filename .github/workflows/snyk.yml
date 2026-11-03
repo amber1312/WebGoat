@@ -29,6 +29,8 @@ jobs:
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Verify scan output
+        run: test -s snyk-result.json
       - uses: actions/upload-artifact@v4
         with:
           name: snyk-result
