@@ -10,7 +10,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 21
+          java-version: 25
       - name: Build
         run: ./mvnw -q -DskipTests install
 
@@ -31,15 +31,17 @@ jobs:
           tail -50 app.log
           exit 1
       - name: Pull ZAP image
-        run: docker pull ghcr.io/zaproxy/zaproxy@sha256:<ZAP_DIGEST>
+        run: docker pull ghcr.io/zaproxy/zaproxy@sha256:PASTE_ZAP_DIGEST_HERE
 
       # ---- Scan step: the 10% rule applies here ----
       - name: zap baseline scan
         run: |
           mkdir zap-out && chmod 777 zap-out
           docker run --rm --network host -v "$PWD/zap-out:/zap/wrk:rw" \
-            ghcr.io/zaproxy/zaproxy@sha256:<ZAP_DIGEST> \
+            ghcr.io/zaproxy/zaproxy@sha256:PASTE_ZAP_DIGEST_HERE \
             zap-baseline.py -t http://localhost:8080/WebGoat -J zap-report.json -I
+      - name: Verify scan output
+        run: test -s zap-out/zap-report.json
       - uses: actions/upload-artifact@v4
         with:
           name: zap-result
