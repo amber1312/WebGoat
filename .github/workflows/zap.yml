@@ -31,14 +31,14 @@ jobs:
           tail -50 app.log
           exit 1
       - name: Pull ZAP image
-        run: docker pull ghcr.io/zaproxy/zaproxy@sha256:PASTE_ZAP_DIGEST_HERE
+        run: docker pull ghcr.io/zaproxy/zaproxy@sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238
 
       # ---- Scan step: the 10% rule applies here ----
       - name: zap baseline scan
         run: |
           mkdir zap-out && chmod 777 zap-out
           docker run --rm --network host -v "$PWD/zap-out:/zap/wrk:rw" \
-            ghcr.io/zaproxy/zaproxy@sha256:PASTE_ZAP_DIGEST_HERE \
+            ghcr.io/zaproxy/zaproxy@sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238 \
             zap-baseline.py -t http://localhost:8080/WebGoat -J zap-report.json -I
       - name: Verify scan output
         run: test -s zap-out/zap-report.json
