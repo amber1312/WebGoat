@@ -49,7 +49,7 @@ jobs:
             -Dsonar.projectKey=webgoat \
             -Dsonar.sources=. \
             -Dsonar.java.binaries='**/target/classes' \
-            -Dsonar.exclusions='**/node_modules/**,**/dist/**,**/build/**,**/target/**,**/src/test/**'
+            -Dsonar.exclusions='**/node_modules/**,**/dist/**,**/build/**,**/target/**,**/src/test/**,**/src/it/**,**/static/plugins/**'
 
       # ---- Server-side processing (add to scan time for total overhead) ----
       - name: Wait for server processing
@@ -81,6 +81,8 @@ jobs:
             [ "$n" -lt 500 ] && break
             p=$((p+1))
           done
+      - name: Verify scan output
+        run: test -s sonar-summary.json
       - uses: actions/upload-artifact@v4
         with:
           name: sonar-result
